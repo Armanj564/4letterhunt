@@ -247,4 +247,4 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("unshorten", unshorten))
     app.add_handler(CommandHandler("ping", ping_host))
     app.add_handler(CommandHandler("tor", tor_check))
-    app.run_polling()
+    app.run_polling(drop_pending_updates=True)
