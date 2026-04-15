@@ -233,7 +233,8 @@ async def tor_check(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
 
 # ── Main ─────────────────────────────────────────────────
 if __name__ == "__main__":
-    app = ApplicationBuilder().token(TOKEN).build()
+    if not TOKEN:
+    raise ValueError("BOT TOKEN is missing!")
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("ip", ip_lookup))
     app.add_handler(CommandHandler("myip", my_ip))
