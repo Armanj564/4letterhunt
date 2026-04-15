@@ -10,7 +10,7 @@ from datetime import datetime
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-print("TOKEN =", TOKEN)
+TOKEN = "YOUR_BOT_TOKEN_HERE"
 
 # ── /start ──────────────────────────────────────────────
 async def start(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
