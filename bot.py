@@ -223,7 +223,9 @@ async def tor_check(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
         return
     ip = ctx.args[0]
     try:
-        r = requests.get(f"https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=1.1.1.1", timeout=10)
+        r = requests.get("https://check.torproject.org/exit-addresses", timeout=10)
+exit_nodes = r.text.splitlines()
+is_tor = any(ip in line for line in exit_nodes)
         exit_nodes = r.text.splitlines()
         is_tor = ip in exit_nodes
         status = "🧅 YES — This is a Tor exit node!" if is_tor else "✅ NO — Not a Tor exit node"
