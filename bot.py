@@ -101,10 +101,12 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ================================================================
 # IP LOOKUP
 # ================================================================
-
 async def ip_lookup(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
-        await update.message.reply_text("Usage: `/ip <address>`\nExample: `/ip 8.8.8.8`", parse_mode="Markdown")
+        await update.message.reply_text(
+            "Usage: `/ip <address>`\nExample: `/ip 8.8.8.8`",
+            parse_mode="Markdown"
+        )
         return
 
     ip = context.args[0]
@@ -112,35 +114,43 @@ async def ip_lookup(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     try:
         async with session.get(f"https://ipapi.co/{ip}/json/") as r:
-    data = await r.json()
-    print(data)
+            data = await r.json()
 
-        if d.get("error"):
-            await update.message.reply_text(f"❌ Invalid IP address: `{ip}`", parse_mode="Markdown")
+        print(data)
+
+        if data.get("error"):
+            await update.message.reply_text(
+                f"❌ Invalid IP address: `{ip}`",
+                parse_mode="Markdown"
+            )
             return
 
         # Threat check
         try:
-            threat = requests.get(f"https://api.abuseipdb.com/api/v2/check?ipAddress={ip}",
-                                  headers={"Key": "free", "Accept": "application/json"}, timeout=5)
+            requests.get(
+                f"https://api.abuseipdb.com/api/v2/check?ipAddress={ip}",
+                headers={"Key": "free", "Accept": "application/json"},
+                timeout=5
+            )
             abuse_score = "N/A"
         except:
             abuse_score = "N/A"
 
-        country_flag = d.get("country", "")
+        country_flag = data.get("country", "")
+
         text = (
             f"{SEPARATOR}\n"
             f"🌍 *IP INTELLIGENCE REPORT*\n"
             f"{SEPARATOR}\n\n"
             f"🎯 IP: `{ip}`\n"
-            f"🌍 Country: `{d.get('country_name', 'N/A')}` {country_flag}\n"
-            f"🏙️ City: `{d.get('city', 'N/A')}`\n"
-            f"📍 Region: `{d.get('region', 'N/A')}`\n"
-            f"🏢 ISP: `{d.get('org', 'N/A')}`\n"
-            f"🌐 ASN: `{d.get('asn', 'N/A')}`\n"
-            f"🕐 Timezone: `{d.get('timezone', 'N/A')}`\n"
-            f"📮 Postal: `{d.get('postal', 'N/A')}`\n"
-            f"🗺️ Coordinates: `{d.get('latitude', 'N/A')}, {d.get('longitude', 'N/A')}`\n\n"
+            f"🌍 Country: `{data.get('country_name', 'N/A')}` {country_flag}\n"
+            f"🏙️ City: `{data.get('city', 'N/A')}`\n"
+            f"📍 Region: `{data.get('region', 'N/A')}`\n"
+            f"🏢 ISP: `{data.get('org', 'N/A')}`\n"
+            f"🌐 ASN: `{data.get('asn', 'N/A')}`\n"
+            f"🕐 Timezone: `{data.get('timezone', 'N/A')}`\n"
+            f"📮 Postal: `{data.get('postal', 'N/A')}`\n"
+            f"🗺️ Coordinates: `{data.get('latitude', 'N/A')}, {data.get('longitude', 'N/A')}`\n\n"
             f"🔗 *Investigate further:*\n"
             f"• [Shodan](https://www.shodan.io/host/{ip})\n"
             f"• [VirusTotal](https://www.virustotal.com/gui/ip-address/{ip})\n"
@@ -148,11 +158,11 @@ async def ip_lookup(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{SEPARATOR}\n"
             f"{WARNING}"
         )
+
     except Exception as e:
         text = f"❌ Error: `{str(e)}`"
 
     await update.message.reply_text(text, parse_mode="Markdown", disable_web_page_preview=True)
-
 # ================================================================
 # WHOIS
 # ================================================================
