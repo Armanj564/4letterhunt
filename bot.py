@@ -113,7 +113,8 @@ async def ip_lookup(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         async with aiohttp.ClientSession() as session:
     async with session.get(f"https://ipapi.co/{ip}/json/") as r:
-        d = await r.json()
+    data = await r.json()
+    print(data)
 
         if d.get("error"):
             await update.message.reply_text(f"❌ Invalid IP address: `{ip}`", parse_mode="Markdown")
