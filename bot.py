@@ -112,8 +112,8 @@ async def ip_lookup(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"🔍 Investigating `{ip}`...", parse_mode="Markdown")
 
     try:
-        async with session.get(f"https://ipapi.co/{ip}/json/") as r:
-            data = await r.json()
+        r = requests.get(f"https://ipapi.co/{ip}/json/")
+data = r.json()
 
         print(data)
 
